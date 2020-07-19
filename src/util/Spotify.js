@@ -3,7 +3,7 @@ import { isCompositeComponent } from 'react-dom/test-utils';
 
 let accessToken = '';
 const CLIENT_ID = config.CLIENT_ID;
-const REDIRECT_URI = 'MySpotifyLite.surge.sh';
+const REDIRECT_URI = 'http://my-spotify-lite.surge.sh';
 
 const Spotify = {
     getAccessToken: () => {
