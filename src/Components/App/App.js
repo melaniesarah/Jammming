@@ -91,6 +91,10 @@ class App extends Component {
     const trackURIs = [];
   }
 
+  search = term => {
+    console.log(term);
+  }
+
   render() {
     return (
       <div>
@@ -98,7 +102,7 @@ class App extends Component {
           Ja<span className="highlight">mmm</span>ing
         </h1>
         <div className="App">
-          <SearchBar />
+          <SearchBar onSearch={this.search} />
           <div className="App-playlist">
             <SearchResults
               searchResults={this.state.searchResults}
