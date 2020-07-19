@@ -34,17 +34,15 @@ const Spotify = {
     search: async function(term) {
         while (!accessToken)  {
             this.getAccessToken();
-            setTimeout(() => null, 200);
+            setTimeout(() => null, 250);
         }
-
         const response = await fetch(
           `https://api.spotify.com/v1/search?type=track&q=${term}`,
           {
             method: 'GET',
             headers: { Authorization: `Bearer ${accessToken}` },
           }
-        );
-          
+        );      
         if (response.ok) {
             const jsonResponse = await response.json();
             const tracks = jsonResponse.tracks.items.map((track) => {
@@ -60,6 +58,100 @@ const Spotify = {
         } else {
             throw new Error('no response');
         }    
+    },
+
+    savePlaylist: async function(playlistName, trackURIs) {
+        let playlistId = '';
+        let userId = '';
+
+        if (!playlistName || !trackURIs) return;
+
+        while (!accessToken) {
+          this.getAccessToken();
+          setTimeout(() => null, 250);
+        }
+
+        const getHeaders = method => {
+            const headers = new Headers();
+            headers.append('Authorization', `Bearer ${accessToken}`) 
+            if (method === 'POST') {
+                headers.append('Content-Type', 'application/json') 
+            };
+            return headers;
+        }
+            
+        const getUrl = endpointType => {
+            let url;
+            switch (endpointType) {
+                case 'user':
+                    url = 'https://api.spotify.com/v1/me';
+                    break;
+                case 'playlists':
+                    url =  `https://api.spotify.com/v1/users/${userId}/playlists`;
+                    break;
+                default:
+                    url = 'https://api.spotify.com/v1/';
+                    break;
+            }
+            return url;
+        };
+
+
+        const getUserId = async () => {
+            const url = getUrl('user');
+            const myHeaders = getHeaders('GET');
+            
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: myHeaders
+            });
+
+            if (response.ok) {
+                const jsonResponse = await response.json();
+                return jsonResponse.id;
+            } else {
+                return response.error;
+            }
+        };
+
+        const addNewPlaylist = async () => {
+            const url = getUrl('playlists');
+            const myHeaders = getHeaders('POST');
+            const accessHeaders = getHeaders('GET');
+            const data = { 
+                name: playlistName, 
+                public: true 
+            };
+
+            const preResponse = await fetch(url, {
+              method: 'OPTIONS',
+              'Access-Control-Request-Method': 'POST',
+              'Access-Control-Request-Headers': myHeaders,
+              headers: accessHeaders,
+              body: JSON.stringify(data),
+              Origin: 'https://api.spotify.com',
+              Host: 'http://localhost:3000'
+            });
+
+            const response = await fetch(url, {
+              method: 'POST',
+              headers: myHeaders,
+              body: JSON.stringify(data),
+              Origin: 'https://api.spotify.com',
+              Host: 'http://localhost:3000',
+            });
+
+            if (response.ok) {
+                const jsonResponse = await response.json();
+                return jsonResponse.id;
+            } else {
+                return response.error;
+            }
+        }
+     
+         userId = await getUserId();
+         const newPlaylistId = await addNewPlaylist();
+         console.log(newPlaylistId);
     }
 };
 

@@ -42,24 +42,28 @@ class App extends Component {
           name: 'song11',
           artist: 'artist11',
           album: 'album11',
+          uri: 'uri11',
         },
         {
           id: 12,
           name: 'song12',
           artist: 'artist12',
           album: 'album12',
+          uri: 'uri12',
         },
         {
           id: 13,
           name: 'song13',
           artist: 'artist31',
           album: 'album13',
+          uri: 'uri13',
         },
         {
           id: 14,
           name: 'song14',
           artist: 'artist14',
           album: 'album14',
+          uri: 'uri14',
         },
       ],
     };
@@ -93,7 +97,14 @@ class App extends Component {
   }
 
   savePlaylist = () => {
-    const trackURIs = [];
+    const { playlistTracks, playlistName } = this.state;
+    
+    const trackURIs =
+      Array.isArray(playlistTracks) && playlistTracks.length ? 
+      playlistTracks.map((track) => track.uri) : [];
+
+    console.log('track URIs: ' + trackURIs);
+    Spotify.savePlaylist(playlistName, trackURIs);
   }
 
   search = async term => {
