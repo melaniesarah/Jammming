@@ -9,63 +9,9 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchResults: [
-        {
-          id: 1,
-          name: 'song1',
-          artist: 'artist1',
-          album: 'album1',
-        },
-        {
-          id: 2,
-          name: 'song2',
-          artist: 'artist2',
-          album: 'album2',
-        },
-        {
-          id: 3,
-          name: 'song3',
-          artist: 'artist3',
-          album: 'album3',
-        },
-        {
-          id: 4,
-          name: 'song4',
-          artist: 'artist4',
-          album: 'album4',
-        },
-      ],
-      playlistName: 'My Playlist',
-      playlistTracks: [
-        {
-          id: 11,
-          name: 'song11',
-          artist: 'artist11',
-          album: 'album11',
-          uri: 'uri11',
-        },
-        {
-          id: 12,
-          name: 'song12',
-          artist: 'artist12',
-          album: 'album12',
-          uri: 'uri12',
-        },
-        {
-          id: 13,
-          name: 'song13',
-          artist: 'artist31',
-          album: 'album13',
-          uri: 'uri13',
-        },
-        {
-          id: 14,
-          name: 'song14',
-          artist: 'artist14',
-          album: 'album14',
-          uri: 'uri14',
-        },
-      ],
+      searchResults: [],
+      playlistName: 'New Playlist',
+      playlistTracks: [],
     };
   }
 
@@ -105,6 +51,11 @@ class App extends Component {
 
     console.log('track URIs: ' + trackURIs);
     Spotify.savePlaylist(playlistName, trackURIs);
+
+    this.setState({
+      playlistName: 'New Playlist',
+      playlistTracks: [],
+    });
   }
 
   search = async term => {
