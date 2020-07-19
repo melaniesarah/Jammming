@@ -1,6 +1,7 @@
 {
   "name": "jammmming",
   "version": "0.1.0",
+  "homepage": "http://MySpotifyLite.surge.sh",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
@@ -12,6 +13,8 @@
     "surge": "^0.21.6"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "surge -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
