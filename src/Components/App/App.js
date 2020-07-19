@@ -65,8 +65,10 @@ class App extends Component {
     };
   }
 
-  addTrack = (track) => {
-    if (this.state.playlistTracks.find(savedTrack => track.id === savedTrack.id)) {
+  addTrack = track => {
+    if (
+      this.state.playlistTracks.find((savedTrack) => track.id === savedTrack.id)
+    ) {
       return;
     }
     const playlistTracks = this.state.playlistTracks;
@@ -74,12 +76,16 @@ class App extends Component {
     this.setState({ playlistTracks });
   };
 
-  removeTrack = (track) => {
-    const playlistTracks = this.state.playlistTracks.filter(savedTrack => {
+  removeTrack = track => {
+    const playlistTracks = this.state.playlistTracks.filter((savedTrack) => {
       return savedTrack.id !== track.id;
     });
     this.setState({ playlistTracks });
   };
+
+  updatePlaylistName = name => {
+    this.setState({ playlistName: name });
+  }
 
   render() {
     return (
@@ -98,6 +104,7 @@ class App extends Component {
               playlistName={this.state.playlistName}
               playlistTracks={this.state.playlistTracks}
               onRemove={this.removeTrack}
+              onNameChange={this.updatePlaylistName}
             />
           </div>
         </div>
