@@ -19,7 +19,7 @@ class Playlist extends Component {
           onRemove={this.props.onRemove}
           isRemoval={true}
         />
-        <button className="Playlist-save">SAVE TO SPOTIFY</button>
+        <button className="Playlist-save" onClick={this.props.onSave}>SAVE TO SPOTIFY</button>
       </div>
     );
   }

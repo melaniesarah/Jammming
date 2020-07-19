@@ -87,6 +87,10 @@ class App extends Component {
     this.setState({ playlistName: name });
   }
 
+  savePlaylist = () => {
+    const trackURIs = [];
+  }
+
   render() {
     return (
       <div>
@@ -105,6 +109,7 @@ class App extends Component {
               playlistTracks={this.state.playlistTracks}
               onRemove={this.removeTrack}
               onNameChange={this.updatePlaylistName}
+              onSave={this.savePlaylist}
             />
           </div>
         </div>
