@@ -89,6 +89,9 @@ const Spotify = {
                 case 'playlists':
                     url =  `https://api.spotify.com/v1/users/${userId}/playlists`;
                     break;
+                    case 'tracks':
+                        url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`;
+                        break;
                 default:
                     url = 'https://api.spotify.com/v1/';
                     break;
@@ -148,10 +151,33 @@ const Spotify = {
                 return response.error;
             }
         }
+
+        const addTracksToPlaylist = async (playlistId) => {
+            const url = getUrl('tracks');
+            const myHeaders = getHeaders('POST');
+            const data = {
+              uris: trackURIs,
+              public: true,
+            };
+            const response = await fetch(url, {
+              method: 'POST',
+              headers: myHeaders,
+              body: JSON.stringify(data),
+              Origin: 'https://api.spotify.com',
+              Host: 'http://localhost:3000',
+            });
+
+            if (response.ok) {
+              const jsonResponse = await response.json();
+              return jsonResponse.id;
+            } else {
+              return response.error;
+            }
+        }
      
          userId = await getUserId();
-         const newPlaylistId = await addNewPlaylist();
-         console.log(newPlaylistId);
+         const playlistID = await addNewPlaylist();
+         // console.log(playlistID);
     }
 };
 
