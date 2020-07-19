@@ -3,7 +3,7 @@ import { isCompositeComponent } from 'react-dom/test-utils';
 
 let accessToken = '';
 const CLIENT_ID = config.CLIENT_ID;
-const REDIRECT_URI = 'http://localhost:3000/';
+const REDIRECT_URI = 'MySpotifyLite.surge.sh';
 
 const Spotify = {
     getAccessToken: () => {
@@ -80,17 +80,17 @@ const Spotify = {
             return headers;
         }
             
-        const getUrl = endpointType => {
+        const getUrl = (endpointType, id = '') => {
             let url;
             switch (endpointType) {
                 case 'user':
                     url = 'https://api.spotify.com/v1/me';
                     break;
                 case 'playlists':
-                    url =  `https://api.spotify.com/v1/users/${userId}/playlists`;
+                    url =  `https://api.spotify.com/v1/users/${id}/playlists`;
                     break;
                     case 'tracks':
-                        url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`;
+                        url = `https://api.spotify.com/v1/playlists/${id}/tracks`;
                         break;
                 default:
                     url = 'https://api.spotify.com/v1/';
@@ -117,8 +117,8 @@ const Spotify = {
             }
         };
 
-        const addNewPlaylist = async () => {
-            const url = getUrl('playlists');
+        const addNewPlaylist = async (userId) => {
+            const url = getUrl('playlists', userId);
             const myHeaders = getHeaders('POST');
             const accessHeaders = getHeaders('GET');
             const data = { 
@@ -133,7 +133,7 @@ const Spotify = {
               headers: accessHeaders,
               body: JSON.stringify(data),
               Origin: 'https://api.spotify.com',
-              Host: 'http://localhost:3000'
+              Host: REDIRECT_URI
             });
 
             const response = await fetch(url, {
@@ -141,7 +141,7 @@ const Spotify = {
               headers: myHeaders,
               body: JSON.stringify(data),
               Origin: 'https://api.spotify.com',
-              Host: 'http://localhost:3000',
+              Host: REDIRECT_URI
             });
 
             if (response.ok) {
@@ -152,8 +152,8 @@ const Spotify = {
             }
         }
 
-        const addTracksToPlaylist = async (playlistId) => {
-            const url = getUrl('tracks');
+        const addTracksToPlaylist = async (listId) => {
+            const url = getUrl('tracks', listId);
             const myHeaders = getHeaders('POST');
             const data = {
               uris: trackURIs,
@@ -164,7 +164,7 @@ const Spotify = {
               headers: myHeaders,
               body: JSON.stringify(data),
               Origin: 'https://api.spotify.com',
-              Host: 'http://localhost:3000',
+              Host: REDIRECT_URI,
             });
 
             if (response.ok) {
@@ -176,8 +176,8 @@ const Spotify = {
         }
      
          userId = await getUserId();
-         const playlistID = await addNewPlaylist();
-         // console.log(playlistID);
+         const playlistID = await addNewPlaylist(userId);
+         const addTracks = await addTracksToPlaylist(playlistID);
     }
 };
 
