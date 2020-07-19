@@ -3,7 +3,7 @@ import './App.css';
 import SearchBar from '../SearchBar/SearchBar';
 import SearchResults from '../SearchResults/SearchResults';
 import Playlist from '../Playlist/Playlist';
-
+import Spotify from '../../util/Spotify';
 
 class App extends Component {
   constructor(props) {
@@ -65,6 +65,11 @@ class App extends Component {
     };
   }
 
+  // componentDidMount() {
+  //   const accessToken = Spotify.getAccessToken();
+  //   this.setState({ accessToken });
+  // }
+
   addTrack = track => {
     if (
       this.state.playlistTracks.find((savedTrack) => track.id === savedTrack.id)
@@ -91,15 +96,20 @@ class App extends Component {
     const trackURIs = [];
   }
 
-  search = term => {
-    console.log(term);
+  search = async term => {
+    let searchResults = await Spotify.search(term);
+    if (!searchResults) {
+      searchResults = [];
+    }
+    this.setState({ searchResults });
+    
   }
 
   render() {
     return (
       <div>
         <h1>
-          Ja<span className="highlight">mmm</span>ing
+          <span className="highlight">mmm</span>ing
         </h1>
         <div className="App">
           <SearchBar onSearch={this.search} />
